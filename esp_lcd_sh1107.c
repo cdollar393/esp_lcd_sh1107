@@ -28,6 +28,19 @@ static const char *TAG = "sh1107";
 #define LCD_SH1107_PARAM_MIRROR_Y       0xC0
 #define LCD_SH1107_PARAM_INVERT_COLOR   0xA6
 
+/* Define the different display offsets for native panel orientation. */
+#define LCD_SH1107_CMD_DISP_OFFSET_PORTRAIT  0x60
+#define LCD_SH1107_CMD_DISP_OFFSET_LANDSCAPE 0x00
+
+/*
+ * Set the native orientation of the OLED panel. Some panels have a portrait
+ * orientation, while others are landscape. You can determine this by looking
+ * at which edge the FPC cable comes off of the display. If it comes from the
+ * short side then the native orientation is portrait, and from the long side
+ * is landscape.
+*/
+#define LCD_SH1107_CMD_DISP_OFFSET LCD_SH1107_CMD_DISP_OFFSET_LANDSCAPE
+
 static esp_err_t panel_sh1107_del(esp_lcd_panel_t *panel);
 static esp_err_t panel_sh1107_reset(esp_lcd_panel_t *panel);
 static esp_err_t panel_sh1107_init(esp_lcd_panel_t *panel);
@@ -142,7 +155,7 @@ static const uint8_t vendor_specific_init[] = {
     0x7f,   /* duty = 1/64 */
 
     0xd3,   /* set display offset */
-    0x60,
+    LCD_SH1107_CMD_DISP_OFFSET,
 
     0xd5,   /* set osc division */
     0x51,
